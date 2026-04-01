@@ -1,0 +1,10 @@
+services:
+  web-ffmpeg:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ${MEDIA_DIRECTORY}:/media
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+    
