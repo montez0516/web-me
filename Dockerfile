@@ -16,7 +16,7 @@ ENV PYTHONUNBUFFERED=1
 
 # install dependencies
 RUN apt-get update && \
-    apt-get install -y ffmpeg nginx && \
+    apt-get install -y ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 # install python deps
@@ -30,7 +30,6 @@ COPY backend/ ./backend
 COPY --from=frontend-build /app/dist /app/frontend
 
 # nginx config
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 

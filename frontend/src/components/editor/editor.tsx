@@ -15,7 +15,7 @@ export default function Editor({ file }: Props) {
     if (!video) return;
 
     const duration = video.duration;
-    if(duration > 0)
+    if (duration > 0)
       setInfo({
         duration: video.duration,
         minDuration: 0,
@@ -42,22 +42,22 @@ export default function Editor({ file }: Props) {
   };
 
   const saveChanges = () => {
-    if(!info) return;
+    if (!info) return;
     console.log(file, info.minDuration, info.maxDuration);
     (async () => {
-      const res = await fetch("http://127.0.0.1/api/ffmpeg",
+      const res = await fetch("/api/ffmpeg",
         {
-          method:"POST",
-          body:JSON.stringify({action:"trim", filename:file, min:info?.minDuration, max:info?.maxDuration}),
-          headers:{
-            "Content-Type":"application/json"
+          method: "POST",
+          body: JSON.stringify({ action: "trim", filename: file, min: info?.minDuration, max: info?.maxDuration }),
+          headers: {
+            "Content-Type": "application/json"
           }
         }
       );
 
-      if(!res.ok)
+      if (!res.ok)
         return;
-      
+
       console.log(await res.text());
     })();
   }
@@ -76,15 +76,15 @@ export default function Editor({ file }: Props) {
           {file && (
 
             <video
-            src={"http://127.0.0.1" + file}
-            ref={videoEl}
-            controls
-            onLoadedMetadata={handleMetaData}
-            onError={() => setInfo(null)}
-            onTimeUpdate={handleTimeUpdate}
-          className="w-full h-full bg-black aspect-video"
-          ></video>
-        )}
+              src={file}
+              ref={videoEl}
+              controls
+              onLoadedMetadata={handleMetaData}
+              onError={() => setInfo(null)}
+              onTimeUpdate={handleTimeUpdate}
+              className="w-full h-full bg-black aspect-video"
+            ></video>
+          )}
         </div>
       </div>
       <div
@@ -94,22 +94,22 @@ export default function Editor({ file }: Props) {
         {info && (
           <>
             <SeekBar
-            info={info}
-            currentTime={currentTime}
-            onDurationChanged={setInfo}
-            onPositionChanged={(num) => {
-              const video = videoEl.current;
-              if (!video) return;
-              
-              video.currentTime = num;
-            }}
+              info={info}
+              currentTime={currentTime}
+              onDurationChanged={setInfo}
+              onPositionChanged={(num) => {
+                const video = videoEl.current;
+                if (!video) return;
+
+                video.currentTime = num;
+              }}
             />
             <div className="w-1/6 h-1/4 bg-neutral-800 rounded-md text-white text-center content-center outline-1 outline-white"
               onClick={saveChanges}
             >
               Save
             </div>
-            </>
+          </>
         )}
       </div>
     </div>
